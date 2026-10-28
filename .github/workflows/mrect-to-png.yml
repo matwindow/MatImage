@@ -1,0 +1,27 @@
+name: MRECT(MatRectangle) To PNG
+on:
+  push:
+    paths:
+      - 'MatImage/mrect/*.mrect'
+jobs:
+  render_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run Renderer
+        run: node render_mrect.js
+
+      - name: Commit and Push Preview Image
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@://github.com"
+          git add MatImage/mrect/0000_preview.png
+          git commit -m "Auto-generated mrect preview [skip ci]" || exit 0
+          git push
