@@ -16,7 +16,7 @@ jobs:
           node-version: '20'
 
       - name: Run Renderer
-        run: node render_mrect.js
+        run: node mrect/toPNG.js
 
       - name: Commit and Push Preview Image
         run: |
