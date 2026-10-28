@@ -1,8 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 
-const inputFile = path.join(__dirname, 'MatImage', 'mrect', '0000.mrect');
-const outputFile = path.join(__dirname, 'MatImage', 'mrect', '0000_preview.png');
+const inputFile = path.join(__dirname, '0000.mrect');
+const outputFile = path.join(__dirname, '0000_preview.png');
 
 try {
     const data = fs.readFileSync(inputFile, 'utf8');
@@ -32,18 +32,8 @@ try {
     });
 
     const svgContent = `<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://w3.org">\n${svgRects}</svg>`;
-    const base64Svg = Buffer.from(svgContent).toString('base64');
-    const htmlWrapper = `<html><body style="margin:0;"><img src="data:image/svg+xml;base64,${base64Svg}" width="200" height="200"/></body></html>`;
     
-    const htmlFile = path.join(__dirname, 'temp_render.html');
-    fs.writeFileSync(htmlFile, htmlWrapper);
-    
-    fs.mkdirSync(path.dirname(outputFile), { recursive: true });
-    
-    const { execSync } = require('child_process');
-    execSync(`npx npx chard-cli ${htmlFile} ${outputFile} --width 200 --height 200`, { stdio: 'ignore' });
-    
-    fs.unlinkSync(htmlFile);
+    fs.writeFileSync(outputFile, svgContent);
     console.log('Success');
 } catch (err) {
     process.exit(1);
